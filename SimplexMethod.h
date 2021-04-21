@@ -6,14 +6,16 @@
 
 using namespace Eigen;
 
-void SimplexMethod(MatrixXd &m, VectorXd &BV)
+double SimplexMethod(MatrixXd &m, VectorXd &BV, bool verbose=false)
 {
 
   MatrixXd A(m.rows() - 1, m.cols() - 1);
   VectorXd c(A.cols());
   VectorXd b(BV.size());
-  std::cout << "SimplexMatrix:\n"
-            << m << std::endl;
+  if (verbose) {
+    std::cout << "SimplexMatrix:\n"
+              << m << std::endl;
+  }
   for (int i = 0; i < BV.size(); i++)
   {
     m.row(i + 1) /= m(i + 1, BV(i) - 1);
@@ -21,36 +23,42 @@ void SimplexMethod(MatrixXd &m, VectorXd &BV)
       if (j != (i + 1))
         m.row(j) -= m.row(i + 1) * m(j, BV(i) - 1);
   }
-  std::cout << "SimplexMatrixInCanonicalForm:\n"
-            << m << std::endl;
-
+  if (verbose) {
+    std::cout << "SimplexMatrixInCanonicalForm:\n"
+              << m << std::endl;
+  }
   while (true)
   {
     A = m.bottomLeftCorner(A.rows(), A.cols());
     c = m.topLeftCorner(1, c.size()).transpose();
     b = m.bottomRightCorner(b.size(), 1);
 
-    double mindest = c(0);
+    double min_value = c(0);
     int Spalte = 0;
     for (int i = 1; i < A.cols(); i++)
-      if (c(i) < mindest)
+      if (c(i) < min_value)
       {
-        mindest = c(i);
+        min_value = c(i);
         Spalte = i;
       }
-    if (mindest >= 0)
+    if (min_value >= 0)
     {
-      std::cout << "The optimal condition has been reached.\n";
-      std::cout << "The basic variables and their corresponding values are:\n";
-      for (int i = 0; i < BV.size(); i++)
-        std::cout << BV(i) << ":" << b(i) << "\n";
-      std::cout << "The optimal value is: " << -1 * m(0, m.cols() - 1);
-      return;
+      double optimal_value = -1 * m(0, m.cols() - 1);
+      if (verbose) {
+        std::cout << "The optimal condition has been reached.\n";
+        std::cout << "The basic variables and their corresponding values are:\n";
+        for (int i = 0; i < BV.size(); i++)
+          std::cout << BV(i) << ":" << b(i) << "\n";
+        std::cout << "The optimal value is: " << optimal_value;
+      }
+      return optimal_value;
     }
 
     else
     {
-      std::cout << "EnterVariable: " << (Spalte + 1) << "\n";
+      if (verbose) {
+        std::cout << "EnterVariable: " << (Spalte + 1) << "\n";
+      }
       int Rahne = 0;
       double maximal = 100;
       for (int i = 0; i < A.rows(); i++)
@@ -61,17 +69,20 @@ void SimplexMethod(MatrixXd &m, VectorXd &BV)
         }
       if (maximal == 0)
       {
-        std::cout << "The LP problem is unbounded";
-        exit(0);
+        throw std::logic_error("The LP problem is unbounded");
       }
-      std::cout << "OuterVariable: " << BV(Rahne) << "\n";
+      if (verbose) {
+        std::cout << "OuterVariable: " << BV(Rahne) << "\n";
+      }
       BV(Rahne) = Spalte + 1;
       m.row(Rahne + 1) /= m(Rahne + 1, Spalte);
       for (int i = 0; i < m.rows(); i++)
         if (i != (Rahne + 1))
           m.row(i) -= m.row(Rahne + 1) * m(i, Spalte);
-      std::cout << "After transformation, the Simplex Matrix changes to:\n"
-                << m << "\n";
+      if (verbose) {
+        std::cout << "After transformation, the Simplex Matrix changes to:\n"
+                  << m << "\n";
+      }
     }
   }
 }
@@ -91,7 +102,7 @@ VectorXd TwoStageSimplexMethod(MatrixXd &MI)
     MIA(0, i) = 1;
     BV(i + 1 - MI.cols()) = i + 1;
   }
-  SimplexMethod(MIA, BV);
+  SimplexMethod(MIA, BV); // find initial basic feasible solution first
   SimplexMethod(MI, BV);
   return BV;
 }
