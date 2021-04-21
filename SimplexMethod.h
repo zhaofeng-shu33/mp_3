@@ -12,7 +12,20 @@ VectorXd get_solution(const MatrixXd &m, const VectorXd& BV) {
 
   for (int i = 0; i < BV.size(); i++)
     x(BV(i) - 1) = b(i);
-  return x;  
+  return x;
+}
+
+void order_vector(VectorXd& BV) {
+  int n = BV.size();
+  for (int i = 0; i < n; i++) {
+    for (int j = i + 1; j < n; j++) {
+      if (BV(i) > BV(j)) {
+        double tmp = BV(j);
+        BV(j) = BV(i);
+        BV(i) = tmp;
+      }
+    }
+  }
 }
 
 double SimplexMethod(MatrixXd &m, VectorXd &BV, bool verbose=false)
@@ -96,7 +109,7 @@ double SimplexMethod(MatrixXd &m, VectorXd &BV, bool verbose=false)
   }
 }
 
-VectorXd TwoStageSimplexMethod(MatrixXd &MI)
+VectorXd TwoStageSimplexMethod(MatrixXd &MI, bool verbose=false)
 {
   VectorXd BV(MI.rows() - 1);
   MatrixXd Ma(MI.rows(), MI.rows() - 1);
@@ -111,8 +124,9 @@ VectorXd TwoStageSimplexMethod(MatrixXd &MI)
     MIA(0, i) = 1;
     BV(i + 1 - MI.cols()) = i + 1;
   }
-  SimplexMethod(MIA, BV); // find initial basic feasible solution first
-  SimplexMethod(MI, BV);
+  SimplexMethod(MIA, BV, verbose); // find initial basic feasible solution first
+  order_vector(BV);
+  SimplexMethod(MI, BV, verbose);
   return BV;
 }
 

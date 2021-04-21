@@ -5,6 +5,5 @@ int main(int argc, char *argv[])
 	MatrixXd MI;
   VectorXd BV;	   	
   Initialize(MI, argv[1]);
-	BV.resize(MI.rows() - 1);
-	BV = TwoStageSimplexMethod(MI);
+	BV = TwoStageSimplexMethod(MI, true);
 }

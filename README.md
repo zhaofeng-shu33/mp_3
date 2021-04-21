@@ -1,7 +1,19 @@
 Mathematical Programming Code implemented in C++ when I am 
 in third year of undergraduate.
 
+## Simplex Algorithm
+
+Simplex algorithms solves the primal form of linear programming:
+$$
+\begin{align}
+\min \, & c^T x \\
+s.t.\,& Ax=b, x\geq 0
+\end{align}
+$$
+where $A$ is an $m\times n$ matrix, $b$ is an $m$ dimensional vector, and $x,c$ are $n$ dimensional vectors.
+
 ## Input data format
+
 a txt file containing the following:
 ```
 -1 -2 0 0 0 0
