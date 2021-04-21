@@ -4,7 +4,7 @@
 #include "stringtoNum.h"
 #include "QPESolver.h"
 using namespace Eigen;
-void ActiveSetMethod(MatrixXd& m,VectorXd& InitialPoint){ //all the contrainsts are greater than
+void ActiveSetMethod(MatrixXd& m,VectorXd& InitialPoint){ //all the constraints are greater than
 	int dim=m.cols()-1;
 	MatrixXd G(dim,dim);
 	G<<m.topLeftCorner(dim,dim);

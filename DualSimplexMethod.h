@@ -59,17 +59,7 @@ void DualSimplexMethod(MatrixXd& m,VectorXd& BV){
 	
 }
 #endif
-/*
-int main(int argc, char *argv[]) 
-{   
-	   
-	Initialize(MI,argv[1]);
-	BV.resize(2);
-	BV<<3,1;
-	std::cout<<BV<<'\n';
-	DualSimplexMethod(MI);	
-   system("pause");
-}*/
+
 
 
 
