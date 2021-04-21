@@ -17,7 +17,7 @@ void SimplexMethod(MatrixXd& m,VectorXd& BV){
   }
   std::cout <<"SimplexMatrixInCanonicalForm:\n"<< m << std::endl;
 
-  while(1){
+  while (true) {
   A=m.bottomLeftCorner(A.rows(),A.cols());
   c=m.topLeftCorner(1,c.size()).transpose(); 
   b=m.bottomRightCorner(b.size(),1);
@@ -54,17 +54,17 @@ void SimplexMethod(MatrixXd& m,VectorXd& BV){
     for(int i=0;i<m.rows();i++)
         if(i!=(Rahne+1))
         	 m.row(i)-=m.row(Rahne+1)*m(i,Spalte);
-    std::cout<<"After transformation, the Simplex Matirx changes to:\n"<<m<<"\n";
+    std::cout<<"After transformation, the Simplex Matrix changes to:\n"<<m<<"\n";
    }
    }
 }
-#endif
+
 VectorXd TwoStageSimplexMethod(MatrixXd& MI){
 	VectorXd BV(MI.rows()-1);   
   MatrixXd Ma(MI.rows(),MI.rows()-1);
   for(int i=0;i<MI.rows()-1;i++)
       Ma(i+1,i)=1;	
-  MatrixXd MIA(MI.rows(),MI.cols()+MI.rows()-1);;
+  MatrixXd MIA(MI.rows(),MI.cols()+MI.rows()-1);
   MIA<<MI.topLeftCorner(MI.rows(),MI.cols()-1),Ma,MI.col(MI.cols()-1);
 	for(int i=0;i<MI.cols()-1;i++)
 		  MIA(0,i)=0;
@@ -79,3 +79,4 @@ VectorXd TwoStageSimplexMethod(MatrixXd& MI){
 
 
 
+#endif

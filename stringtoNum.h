@@ -18,7 +18,7 @@ void Initialize(Eigen::MatrixXd& m1,char* txtName){
     int numC=split_result.size();
     fin.close();
     fin.open(txtName);
-    m1.resize(numR,numC);
+    m1.resize(numR, numC);
     int i=0;
     while(getline(fin,str)){
     split(split_result,str,is_any_of(" "),token_compress_on);
