@@ -6,6 +6,15 @@
 
 using namespace Eigen;
 
+VectorXd get_solution(const MatrixXd &m, const VectorXd& BV) {
+  VectorXd b = m.bottomRightCorner(BV.size(), 1);
+  VectorXd x = VectorXd::Zero(m.cols() - 1);
+
+  for (int i = 0; i < BV.size(); i++)
+    x(BV(i) - 1) = b(i);
+  return x;  
+}
+
 double SimplexMethod(MatrixXd &m, VectorXd &BV, bool verbose=false)
 {
 
