@@ -51,3 +51,18 @@ TEST(SIMPLEX, BASIC_3) {
     EXPECT_DOUBLE_EQ(x[3], 0);
     EXPECT_DOUBLE_EQ(x[4], 0);
 }
+
+// test two stage simplex second example
+TEST(SIMPLEX, BASIC_4) {
+	MatrixXd MI;
+    VectorXd BV;   	
+    Initialize(MI, "testData7.txt");
+	BV = TwoStageSimplexMethod(MI);
+    double ov = -1 * MI(0, MI.cols() - 1);
+    EXPECT_DOUBLE_EQ(ov, -16);
+    VectorXd x= get_solution(MI, BV);
+    EXPECT_EQ(x.size(), 3);
+    EXPECT_DOUBLE_EQ(x[0], 2);
+    EXPECT_DOUBLE_EQ(x[1], 1.0);
+    EXPECT_DOUBLE_EQ(x[2], 3);
+}
