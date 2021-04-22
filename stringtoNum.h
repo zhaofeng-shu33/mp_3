@@ -13,9 +13,10 @@ void Initialize(Eigen::MatrixXd& m1,char* txtName){
     vector<string> split_result;
     int numR=0;
     ifstream fin(txtName);
-    while(getline(fin,str))numR++;
-    split(split_result,str,is_any_of(" "),token_compress_on);
-    int numC=split_result.size();
+    while (getline(fin, str))
+        numR++;
+    split(split_result, str, is_any_of(" "), token_compress_on);
+    int numC = split_result.size();
     fin.close();
     fin.open(txtName);
     m1.resize(numR, numC);

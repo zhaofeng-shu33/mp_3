@@ -40,6 +40,9 @@ double SimplexMethod(MatrixXd &m, VectorXd &BV, bool verbose=false)
   }
   for (int i = 0; i < BV.size(); i++)
   {
+    if (abs(m(i + 1, BV(i) - 1)) < 1e-4 ) {
+      throw std::overflow_error("division by zero");
+    }
     m.row(i + 1) /= m(i + 1, BV(i) - 1);
     for (int j = 0; j < m.rows(); j++)
       if (j != (i + 1))
